@@ -13,13 +13,18 @@ class Player {
     // hamburger. The y position is the distance from the top margin of the browsing area.
     this.y = GAME_HEIGHT - PLAYER_HEIGHT - 10;
 
+    this.height = PLAYER_HEIGHT;
+    this.width = PLAYER_WIDTH;
+
     // We create a DOM node. We will be updating the DOM node every time we move the player, so we store a reference to the
     // DOM node in a property.
     this.domElement = document.createElement("img");
-    this.domElement.src = "images/player.png";
+    this.domElement.src = "images/player3.png";
     this.domElement.style.position = "absolute";
     this.domElement.style.left = `${this.x}px`;
     this.domElement.style.top = ` ${this.y}px`;
+    this.domElement.style.width = `${this.width}px`;
+    this.domElement.style.height = `${this.height}px`;
     this.domElement.style.zIndex = "10";
     root.appendChild(this.domElement);
     this.rect = this.domElement.getBoundingClientRect();
@@ -43,5 +48,11 @@ class Player {
     }
     this.domElement.style.left = `${this.x}px`;
     this.rect = this.domElement.getBoundingClientRect();
+  }
+
+  shoot() {
+    if (gameEngine.weapons.length < MAX_WEAPONS) {
+      gameEngine.weapons.push(new Weapon(gameEngine.root));
+    }
   }
 }

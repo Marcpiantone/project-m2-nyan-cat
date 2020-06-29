@@ -28,6 +28,10 @@ class Enemy {
     // is still in play. It is set to true whenever the enemy goes past the bottom of the screen.
     // It is used in the Engine to determine whether or not an enemy is in a particular column.
     this.y = -ENEMY_HEIGHT;
+
+    this.height = ENEMY_HEIGHT;
+    this.width = ENEMY_WIDTH;
+
     this.destroyed = false;
 
     // We create a new DOM element. The tag of this DOM element is img. It is the DOM node that will display the enemy image
@@ -36,11 +40,13 @@ class Enemy {
     this.domElement = document.createElement("img");
 
     // We give it a src attribute to specify which image to display.
-    this.domElement.src = "./images/enemy.png";
+    this.domElement.src = "./images/enemy2.png";
     // We modify the CSS style of the DOM node.
     this.domElement.style.position = "absolute";
     this.domElement.style.left = `${this.x}px`;
     this.domElement.style.top = `${this.y}px`;
+    this.domElement.style.width = `${this.width}px`;
+    this.domElement.style.height = `${this.height}px`;
     this.domElement.style.zIndex = 5;
 
     // Show that the user can actually see the img DOM node, we append it to the root DOM node.
@@ -73,7 +79,7 @@ class Enemy {
     }
   }
   delete() {
-    this.root.removeChild(this.domElement); //WHY WON'T THIS WORK !
     this.destroyed = true;
+    this.root.removeChild(this.domElement);
   }
 }

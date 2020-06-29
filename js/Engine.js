@@ -14,6 +14,8 @@ class Engine {
     // Initially, we have no enemies in the game. The enemies property refers to an array
     // that contains instances of the Enemy class
     this.enemies = [];
+    // We will use the same approach to manage our missiles
+    this.weapons = [];
     // We add the background image to the game
     addBackground(this.root);
     // And a score property
@@ -25,14 +27,41 @@ class Engine {
     // And a counter for dead enemies
     this.deadEnemyCounter = 0;
     //And the texts on the screen
-    this.scoreText = new Text(document.getElementById("app"), "2px", "2px");
-    this.resultText = new Text(document.getElementById("app"), "85px", "100px");
+    this.scoreText = new Text(
+      document.getElementById("app"),
+      "2px",
+      "2px",
+      "big"
+    );
+    this.resultText = new Text(
+      document.getElementById("app"),
+      "85px",
+      "100px",
+      "big"
+    );
     this.restartText = new Text(
       document.getElementById("app"),
       "85px",
-      "200px"
+      "200px",
+      "big"
     );
     this.restartText.update(`(SPACE) Start`);
+    this.instructionText1 = new Text(
+      document.getElementById("app"),
+      "150px",
+      "280px",
+      "small"
+    );
+    this.instructionText2 = new Text(
+      document.getElementById("app"),
+      "30px",
+      "300px",
+      "small"
+    );
+    this.instructionText1.update(`IN GAME`);
+    this.instructionText2.update(
+      `(←) move left ; (→) move right ; (SPACE) shoot`
+    );
   }
 
   gameStart = () => {
@@ -41,6 +70,8 @@ class Engine {
     });
     this.gameLoop();
     this.gameStarted = true;
+    this.instructionText1.delete();
+    this.instructionText2.delete();
     this.resultText.delete();
     this.restartText.delete();
     this.deadEnemyCounter = 0;
@@ -48,9 +79,14 @@ class Engine {
   };
 
   gameStop = () => {
+    this.gameStarted = false;
     this.scoreText.delete();
     this.resultText.update(`Your Score : ${this.deadEnemyCounter}`);
     this.restartText.update(`(SPACE) Restart`);
+  };
+
+  gameStatus = () => {
+    return this.gameStarted;
   };
   // The gameLoop will run every few milliseconds. It does several things
   //  - Updates the enemy positions
@@ -75,6 +111,25 @@ class Engine {
         enemy.update(timeDiff);
       });
     }
+    if (this.gameStarted === true) {
+      this.weapons.forEach((weapon) => {
+        weapon.update(timeDiff);
+      });
+    }
+    this.enemies.forEach((enemy) => {
+      this.weapons.forEach((weapon) => {
+        if (
+          enemy.rect.left < weapon.rect.left &&
+          enemy.rect.right > weapon.rect.right &&
+          enemy.rect.bottom >= weapon.rect.top
+        ) {
+          enemy.destroyed = true;
+          weapon.destroyed = true;
+          enemy.delete();
+          weapon.delete();
+        }
+      });
+    });
 
     this.enemies.forEach((enemy) => {
       if (enemy.destroyed === true) {
@@ -88,6 +143,9 @@ class Engine {
     this.enemies = this.enemies.filter((enemy) => {
       return !enemy.destroyed;
     });
+    this.weapons = this.weapons.filter((weapon) => {
+      return !weapon.destroyed;
+    });
 
     // We need to perform the addition of enemies until we have enough enemies.
     while (this.enemies.length < MAX_ENEMIES) {
@@ -96,7 +154,6 @@ class Engine {
       const spot = nextEnemySpot(this.enemies);
       this.enemies.push(new Enemy(this.root, spot));
     }
-
     // We check if the player is dead. If he is, we alert the user
     // and return from the method (Why is the return statement important?)
     if (this.isPlayerDead()) {

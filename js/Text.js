@@ -13,7 +13,6 @@ class Text {
     div.style.color = "white";
     div.style.font = "bold 30px Impact";
     div.style.zIndex = 2000;
-
     root.appendChild(div);
 
     this.domElement = div;
@@ -22,5 +21,8 @@ class Text {
   // This method is used to update the text displayed in the DOM element
   update(txt) {
     this.domElement.innerText = txt;
+  }
+  delete() {
+    this.domElement.innerText = "";
   }
 }

@@ -22,6 +22,7 @@ class Player {
     this.domElement.style.top = ` ${this.y}px`;
     this.domElement.style.zIndex = "10";
     root.appendChild(this.domElement);
+    this.rect = this.domElement.getBoundingClientRect();
   }
 
   // This method will be called when the user presses the left key. See in Engine.js
@@ -32,6 +33,7 @@ class Player {
     }
 
     this.domElement.style.left = `${this.x}px`;
+    this.rect = this.domElement.getBoundingClientRect();
   }
 
   // We do the same thing for the right key. See Engine.js to see when this happens.
@@ -40,5 +42,6 @@ class Player {
       this.x = this.x + PLAYER_WIDTH;
     }
     this.domElement.style.left = `${this.x}px`;
+    this.rect = this.domElement.getBoundingClientRect();
   }
 }

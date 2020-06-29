@@ -16,13 +16,48 @@ class Engine {
     this.enemies = [];
     // We add the background image to the game
     addBackground(this.root);
+    // And a score property
+    this.score = 0;
+    // And a started game property
+    this.gameStarted = false;
+    // And a dead player property
+    this.playerDead = false;
+    // And a counter for dead enemies
+    this.deadEnemyCounter = 0;
+    //And the texts on the screen
+    this.scoreText = new Text(document.getElementById("app"), "2px", "2px");
+    this.resultText = new Text(document.getElementById("app"), "85px", "100px");
+    this.restartText = new Text(
+      document.getElementById("app"),
+      "85px",
+      "200px"
+    );
+    this.restartText.update(`(SPACE) Start`);
   }
 
+  gameStart = () => {
+    this.enemies.forEach((enemy) => {
+      enemy.delete();
+    });
+    this.gameLoop();
+    this.gameStarted = true;
+    this.resultText.delete();
+    this.restartText.delete();
+    this.deadEnemyCounter = 0;
+    this.scoreText.update(`Score: ${this.deadEnemyCounter}`);
+  };
+
+  gameStop = () => {
+    this.scoreText.delete();
+    this.resultText.update(`Your Score : ${this.deadEnemyCounter}`);
+    this.restartText.update(`(SPACE) Restart`);
+  };
   // The gameLoop will run every few milliseconds. It does several things
   //  - Updates the enemy positions
   //  - Detects a collision between the player and any enemy
   //  - Removes enemies that are too low from the enemies array
   gameLoop = () => {
+    console.log(this.gameStarted);
     // This code is to see how much time, in milliseconds, has elapsed since the last
     // time this method was called.
     // (new Date).getTime() evaluates to the number of milliseconds since January 1st, 1970 at midnight.
@@ -35,10 +70,18 @@ class Engine {
     this.lastFrame = new Date().getTime();
     // We use the number of milliseconds since the last call to gameLoop to update the enemy positions.
     // Furthermore, if any enemy is below the bottom of our game, its destroyed property will be set. (See Enemy.js)
-    this.enemies.forEach((enemy) => {
-      enemy.update(timeDiff);
-    });
+    if (this.gameStarted === true) {
+      this.enemies.forEach((enemy) => {
+        enemy.update(timeDiff);
+      });
+    }
 
+    this.enemies.forEach((enemy) => {
+      if (enemy.destroyed === true) {
+        this.deadEnemyCounter += 1;
+        this.scoreText.update(`Score: ${this.deadEnemyCounter}`);
+      }
+    });
     // We remove all the destroyed enemies from the array referred to by \`this.enemies\`.
     // We use filter to accomplish this.
     // Remember: this.enemies only contains instances of the Enemy class.
@@ -57,7 +100,10 @@ class Engine {
     // We check if the player is dead. If he is, we alert the user
     // and return from the method (Why is the return statement important?)
     if (this.isPlayerDead()) {
-      window.alert("Game over");
+      this.gameStarted = false;
+      this.playerDead = true;
+      this.gameStop();
+      //window.alert("Game over");
       return;
     }
 
@@ -68,17 +114,29 @@ class Engine {
   // This method is not implemented correctly, which is why
   // the burger never dies. In your exercises you will fix this method.
   isPlayerDead = () => {
-    let collision = false;
+    let dead = false;
     this.enemies.forEach((enemy) => {
-      console.log(enemy.y + ENEMY_HEIGHT);
-      console.log(this.player.y);
       if (
-        this.player.x === enemy.x &&
-        this.player.y <= enemy.y + ENEMY_HEIGHT - 15
+        // 1st implementation ; quick and easy
+        this.player.rect.left === enemy.rect.left &&
+        this.player.rect.top <= enemy.rect.bottom - 15
+
+        // 2nd implementation ; checking if the boxes of the enemy div actually onverlaps the box of our player
+        // A.X (left) < B.X + B.Width (right)
+        // A.X + A.Width (right) > B.X (left)
+        // A.Y (top) < B.Y + B.Height (bottom)
+        // A.Y + A.Height (bottom) > B.Y (top)
+
+        // Works... But only once you moved the player ?!?!?
+
+        // this.player.rect.left < enemy.rect.right &&
+        // this.player.rect.right > enemy.rect.left &&
+        // this.player.rect.top < enemy.rect.bottom - 15 &&
+        // this.player.rect.bottom > enemy.rect.top
       ) {
-        collision = true;
+        dead = true;
       }
     });
-    return collision;
+    return dead;
   };
 }

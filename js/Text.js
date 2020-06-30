@@ -37,8 +37,8 @@ class Text {
   // This one we'll use to center our div
 
   center() {
-    console.log(this.domElement.clientWidth);
-    //div.style.left = (GAME_WIDTH - this.domElement.clientWidth) / 2;
+    let width = this.domElement.clientWidth;
+    this.domElement.style.left = (GAME_WIDTH - width) / 2;
   }
   // And this one to remove what's in the div
   delete() {

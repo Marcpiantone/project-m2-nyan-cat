@@ -64,6 +64,9 @@ class Engine {
     this.instructionText2.update(
       `(←) move left ; (→) move right ; (SPACE) shoot`
     );
+    this.restartText.center();
+    this.instructionText1.center();
+    this.instructionText2.center();
   }
 
   gameStart = () => {
@@ -92,6 +95,9 @@ class Engine {
       );
     }
     this.restartText.update(`(SPACE) Restart`);
+    this.resultText.center();
+    this.instructionText2.center();
+    this.restartText.center();
     this.scoreTextExploded = false;
   };
 

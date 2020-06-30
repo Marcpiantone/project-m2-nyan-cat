@@ -88,6 +88,9 @@ class Engine {
     this.scoreText.delete();
     if (this.scoreTextExploded === false) {
       this.resultText.update(`Your Score : ${this.deadEnemyCounter}`);
+      this.instructionText2.update(
+        `The killerz from outer space destroyed your ship!`
+      );
     } else {
       this.resultText.update(`Your Score : ${this.deadEnemyCounter}`);
       this.instructionText2.update(

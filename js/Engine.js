@@ -31,8 +31,9 @@ class Engine {
       document.getElementById("app"),
       "2px",
       "2px",
-      "big"
+      "small"
     );
+    this.scoreTextExploded = false;
     this.resultText = new Text(
       document.getElementById("app"),
       "85px",
@@ -81,7 +82,14 @@ class Engine {
   gameStop = () => {
     this.gameStarted = false;
     this.scoreText.delete();
-    this.resultText.update(`Your Score : ${this.deadEnemyCounter}`);
+    if (this.scoreTextExploded === false) {
+      this.resultText.update(`Your Score : ${this.deadEnemyCounter}`);
+    } else {
+      this.resultText.update(`Your Score : ${this.deadEnemyCounter}`);
+      this.instructionText2.update(
+        `You exploded the score counter, you clumsy!`
+      );
+    }
     this.restartText.update(`(SPACE) Restart`);
   };
 
@@ -93,7 +101,6 @@ class Engine {
   //  - Detects a collision between the player and any enemy
   //  - Removes enemies that are too low from the enemies array
   gameLoop = () => {
-    console.log(this.gameStarted);
     // This code is to see how much time, in milliseconds, has elapsed since the last
     // time this method was called.
     // (new Date).getTime() evaluates to the number of milliseconds since January 1st, 1970 at midnight.
@@ -123,18 +130,38 @@ class Engine {
           enemy.rect.right > weapon.rect.right &&
           enemy.rect.bottom >= weapon.rect.top
         ) {
+          const explosion = new Explosion(this.root, enemy.x, enemy.y);
+          explosion.explode();
           enemy.destroyed = true;
           weapon.destroyed = true;
           enemy.delete();
           weapon.delete();
+        }
+        if (
+          this.scoreText.rect.left < weapon.rect.left &&
+          this.scoreText.rect.right > weapon.rect.right &&
+          this.scoreText.rect.bottom >= weapon.rect.top
+        ) {
+          const explosion = new Explosion(
+            this.root,
+            this.scoreText.rect.left,
+            this.scoreText.rect.top
+          );
+          explosion.explode();
+          this.scoreText.delete();
+          this.scoreTextExploded = true;
         }
       });
     });
 
     this.enemies.forEach((enemy) => {
       if (enemy.destroyed === true) {
-        this.deadEnemyCounter += 1;
-        this.scoreText.update(`Score: ${this.deadEnemyCounter}`);
+        if (this.scoreTextExploded === false) {
+          this.deadEnemyCounter += 1;
+          this.scoreText.update(`Score: ${this.deadEnemyCounter}`);
+        } else {
+          this.deadEnemyCounter = 0;
+        }
       }
     });
     // We remove all the destroyed enemies from the array referred to by \`this.enemies\`.

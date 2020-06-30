@@ -1,6 +1,7 @@
 // Remove body margin
 const body = document.querySelector("body");
 const margin0 = (body.style.margin = "0");
+
 // body.style.display = flex;
 // body.style.justifyContent = center;
 
@@ -14,7 +15,6 @@ const gameEngine = new Engine(document.getElementById("app"));
 // The object will contain information about the key press, such as which key was pressed.
 const keydownHandler = (event) => {
   // We call the gameStart method to start the game
-  console.log(`TEST ${gameEngine.gameStatus()}`);
   if (event.code === "Space") {
     if (gameEngine.gameStatus() === false) {
       gameEngine.gameStart();

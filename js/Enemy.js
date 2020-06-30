@@ -55,7 +55,6 @@ class Enemy {
 
     //let me add a property to compare the domRect of the enemy with the one of the player
     this.rect = this.domElement.getBoundingClientRect();
-    console.log(this.rect);
   }
 
   // We set the speed property of the enemy. This determines how fast it moves down the screen.

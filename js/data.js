@@ -18,9 +18,14 @@ const MAX_ENEMIES = 3;
 const PLAYER_WIDTH = 75;
 const PLAYER_HEIGHT = 54;
 
-// A constant forthe weapons and the max amount of missiles
+// A few constants for the weapons and the max amount of missiles
 const WEAPON_WIDTH = 30;
 const WEAPON_HEIGHT = 50;
 const MAX_WEAPONS = 2;
 
+// A few constants for the EXPLOSIONS !
+
+const EXPLOSION_HEIGHT = 30;
+const EXPLOSION_WIDTH = 30;
+const EXPLOSION_SPEED = 0.1;
 // THEMES !!

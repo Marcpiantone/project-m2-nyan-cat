@@ -16,6 +16,8 @@ class Player {
     this.height = PLAYER_HEIGHT;
     this.width = PLAYER_WIDTH;
 
+    // Let's add him a "LIVES" property :
+    this.lives = 3;
     // We create a DOM node. We will be updating the DOM node every time we move the player, so we store a reference to the
     // DOM node in a property.
     this.domElement = document.createElement("img");

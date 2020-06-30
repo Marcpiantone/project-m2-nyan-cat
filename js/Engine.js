@@ -46,7 +46,7 @@ class Engine {
       "200px",
       "big"
     );
-    this.restartText.update(`(SPACE) Start`);
+
     this.instructionText1 = new Text(
       document.getElementById("app"),
       "150px",
@@ -59,6 +59,7 @@ class Engine {
       "300px",
       "small"
     );
+    this.restartText.update(`(SPACE) Start`);
     this.instructionText1.update(`IN GAME`);
     this.instructionText2.update(
       `(←) move left ; (→) move right ; (SPACE) shoot`
@@ -87,10 +88,11 @@ class Engine {
     } else {
       this.resultText.update(`Your Score : ${this.deadEnemyCounter}`);
       this.instructionText2.update(
-        `You exploded the score counter, you clumsy!`
+        `You blasted the score counter, you clumsy!`
       );
     }
     this.restartText.update(`(SPACE) Restart`);
+    this.scoreTextExploded = false;
   };
 
   gameStatus = () => {

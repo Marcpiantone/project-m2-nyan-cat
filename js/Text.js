@@ -17,22 +17,30 @@ class Text {
     if (style === "small") {
       div.style.font = "7px 'Press Start 2P'";
     }
+
     div.style.color = "white";
     div.style.padding = "5px";
     div.style.zIndex = 2000;
     root.appendChild(div);
 
+    //console.log(this.domElement.clientWidth);
     this.domElement = div;
     this.rect = this.domElement.getBoundingClientRect();
-    console.log(this.rect);
   }
 
   // This method is used to update the text displayed in the DOM element
   update(txt) {
     this.domElement.innerText = txt;
     this.rect = this.domElement.getBoundingClientRect();
-    console.log(this.rect);
   }
+
+  // This one we'll use to center our div
+
+  center() {
+    console.log(this.domElement.clientWidth);
+    //div.style.left = (GAME_WIDTH - this.domElement.clientWidth) / 2;
+  }
+  // And this one to remove what's in the div
   delete() {
     this.domElement.innerText = "";
   }
